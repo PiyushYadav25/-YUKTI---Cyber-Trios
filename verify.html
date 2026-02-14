@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Message</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1 class="title">Verify WhatsApp Message</h1>
+
+  <div class="card">
+
+    <!-- TEXT INPUT -->
+    <textarea id="messageInput" placeholder="Paste WhatsApp forwarded text..."></textarea>
+
+    <!-- IMAGE INPUT -->
+    <input type="file" id="imageInput" accept="image/*">
+
+    <!-- LINK INPUT -->
+    <input type="text" id="linkInput" placeholder="Paste news/video link">
+
+    <!-- BUTTON -->
+    <button onclick="verifyMessage()" class="btn">Scan with AI</button>
+
+  </div>
+
+  <!-- LOADER -->
+  <div id="loader" class="loader hidden">
+    <div class="cyber-loader"></div>
+    <p>AI scanning content...</p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="card hidden">
+
+    <h2>AI Detection Result</h2>
+
+    <p id="status"></p>
+    <p id="reason"></p>
+
+    <!-- THREAT METER UI -->
+    <div class="threat-container">
+
+      <div class="threat-label">Threat Level</div>
+
+      <div class="threat-bar">
+        <div id="threatFill"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

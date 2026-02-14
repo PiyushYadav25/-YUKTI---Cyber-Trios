@@ -1,0 +1,3 @@
+Backend/dataset/
+*.csv
+model.pkl

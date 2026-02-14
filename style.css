@@ -1,0 +1,141 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#0d1117,#020c1b);
+  color: white;
+  margin: 0;
+}
+
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #58a6ff;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #161b22;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 0 15px rgba(0,255,255,0.1);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #00c853;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+textarea, input {
+  width: 92%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: none;
+}
+#status {
+  font-size: 22px;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Colors */
+.suspicious {
+  background: #ffd600;
+  color: black;
+}
+
+.invalid {
+  background: #ff5252;
+}
+
+.real {
+  background: #00c853;
+}
+
+.link {
+  background: #00b0ff;
+}
+.loader {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cyber-loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #00e5ff;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* THREAT METER UI */
+
+.threat-container {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.threat-label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #58a6ff;
+}
+
+.threat-bar {
+  width: 100%;
+  height: 14px;
+  background: #2a2f36;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#threatFill {
+  height: 100%;
+  width: 0%;
+  background: green;
+  transition: width 0.5s ease;
+}
+
+.threat-meter {
+  width: 100%;
+  height: 12px;
+  background: #333;
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+#threatFill {
+  height: 100%;
+  width: 0%;
+  background: green;
+  transition: 0.5s;
+}
+
+.cyber-loader {
+  animation: spin 0.8s linear infinite;
+}
