@@ -1,8 +1,11 @@
 function verifyMessage() {
 
-  const text = document.getElementById("messageInput").value.toLowerCase();
+  const textInput = document.getElementById("messageInput");
+  const linkInput = document.getElementById("linkInput");
+
+  const text = textInput.value.toLowerCase().trim();
   const imageFile = document.getElementById("imageInput").files;
-  const link = document.getElementById("linkInput").value;
+  const link = linkInput.value.trim();
 
   const loader = document.getElementById("loader");
   const resultBox = document.getElementById("result");
@@ -10,24 +13,25 @@ function verifyMessage() {
   const reason = document.getElementById("reason");
   const meter = document.getElementById("threatFill");
 
-  loader.classList.remove("hidden");
   resultBox.classList.add("hidden");
+  status.innerText = "";
+  reason.innerHTML = "";
+  meter.style.width = "0%";
+
+  loader.classList.remove("hidden");
 
   setTimeout(() => {
 
-    loader.classList.add("hidden");
-    resultBox.classList.remove("hidden");
-
-    // Empty check
     if (text === "" && imageFile.length === 0 && link === "") {
-      status.innerText = "Invalid Input";
+      loader.classList.add("hidden");
+      resultBox.classList.remove("hidden");
+
+      status.innerText = "INVALID INPUT";
       status.className ="invalid";
-      reason.innerText = "Please provide text, image or link.";
-      meter.style.width = "0%";
+      reason.innerHTML = "<b>Please enter message, image or valid link.</b>";
       return;
     }
 
-    // SOCIAL ENGINEERING TEXT AI
     if (text !== "") {
 
       let scamScore = 0;
@@ -35,79 +39,115 @@ function verifyMessage() {
 
       const urgencyWords = ["urgent","immediately","right now","jaldi","abhi","turant","warning"];
       const fearWords = ["account block","band ho jayega","suspend","freeze","legal action","penalty"];
-      const financialWords = ["bank","account","otp","payment","upi","transaction","pin","verify account"];
-      const authorityWords = ["rbi","bank manager","government","income tax","whatsapp team","support team"];
-      const rewardWords = ["free","reward","gift","win","cashback","offer","prize","jeet gaye"];
-      const manipulationWords = ["forward","share","send to","sabko bhejo","10 logon ko","viral"];
+      const financialWords = ["bank","account","otp","payment","upi","transaction","pin"];
+      const authorityWords = ["rbi","bank manager","government","income tax"];
+      const rewardWords = ["free","reward","gift","win","cashback","offer"];
+      const manipulationWords = ["forward","share","send to","viral"];
 
-      urgencyWords.forEach(word => { if (text.includes(word)) { scamScore += 1; scamReasons.push("Urgency pressure detected"); } });
-      fearWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Fear / threat language"); } });
+      urgencyWords.forEach(word => { if (text.includes(word)) { scamScore += 1; scamReasons.push("Urgency pressure"); } });
+      fearWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Fear language"); } });
       financialWords.forEach(word => { if (text.includes(word)) { scamScore += 3; scamReasons.push("Financial targeting"); } });
       authorityWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Authority impersonation"); } });
-      rewardWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Reward bait detected"); } });
-      manipulationWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Social forwarding manipulation"); } });
+      rewardWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Reward bait"); } });
+      manipulationWords.forEach(word => { if (text.includes(word)) { scamScore += 2; scamReasons.push("Forward manipulation"); } });
+
+      loader.classList.add("hidden");
+      resultBox.classList.remove("hidden");
 
       if (scamScore >= 7) {
         status.innerText = "SCAM DETECTED";
-        status.className = "suspicious";
-        meter.style.width = "90%";
+        status.className = "danger";
+
+        let confidence = 70 + scamScore * 3;
+        if (confidence > 95) confidence = 95;
+
+        meter.style.width = confidence + "%";
         meter.style.background = "red";
+
         reason.innerHTML =
-          "<b>Threat Type:</b> Social Engineering Scam<br><br>" +
-          "<b>AI Confidence:</b> 92%<br><br>" +
+          "<h3>Social Engineering Attack</h3>" +
+          "<b>AI Confidence:</b> " + confidence + "%<br>" +
           "<b>Risk Level:</b> HIGH<br><br>" +
-          "<b>Detection Reasons:</b><br>• " +
-          scamReasons.join("<br>• ");
+          scamReasons.join("<br>");
+
         return;
       }
 
       else if (scamScore >= 4) {
-        status.innerText = "HIGH RISK MESSAGE";
-        status.className = "link";
-        meter.style.width = "65%";
+        status.innerText = "SUSPICIOUS MESSAGE";
+        status.className = "warning";
+
+        let confidence = 60 + scamScore * 3;
+
+        meter.style.width = confidence + "%";
         meter.style.background = "orange";
+
         reason.innerHTML =
-          "<b>Threat Type:</b> Suspicious Behaviour<br><br>" +
-          "<b>AI Confidence:</b> 75%<br><br>" +
+          "<h3>Suspicious Behaviour</h3>" +
+          "<b>AI Confidence:</b> " + confidence + "%<br>" +
           "<b>Risk Level:</b> MEDIUM<br><br>" +
-          "<b>Detection Reasons:</b><br>• " +
-          scamReasons.join("<br>• ");
+          scamReasons.join("<br>");
+
+        return;
+      }
+
+      else {
+        status.innerText = "SAFE MESSAGE";
+        status.className = "safe";
+
+        meter.style.width = "20%";
+        meter.style.background = "green";
+
+        reason.innerHTML =
+          "<h3>No threat patterns detected</h3>" +
+          "<b>Risk Level:</b> LOW";
+
         return;
       }
     }
 
-    // IMAGE AI DETECTION
     if (imageFile.length > 0) {
-      status.innerText = "Analyzing Image...";
-      status.className = "link";
-      reason.innerText = "Running AI forensic scan";
-      checkImageWithBackend(imageFile[0], status, reason, meter);
+
+      const file = imageFile[0];
+      const validTypes = ["image/png","image/jpeg","image/jpg","image/webp"];
+
+      if (!validTypes.includes(file.type)) {
+        loader.classList.add("hidden");
+        resultBox.classList.remove("hidden");
+
+        status.innerText = "INVALID IMAGE";
+        status.className = "invalid";
+        reason.innerHTML = "<b>Upload valid screenshot image only.</b>";
+        return;
+      }
+
+      checkImageWithBackend(file, status, reason, meter, loader, resultBox);
       return;
     }
 
-    // LINK AI DETECTION
     if (link !== "") {
-      status.innerText = "Checking link...";
-      status.className = "link";
-      reason.innerText = "Analyzing link with AI engine.";
-      checkLinkWithBackend(link, status, reason, meter);
+
+      const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}(\/.*)?$/i;
+
+      if (!urlPattern.test(link)) {
+        loader.classList.add("hidden");
+        resultBox.classList.remove("hidden");
+
+        status.innerText = "INVALID LINK";
+        status.className = "invalid";
+        reason.innerHTML = "<b>Enter proper website or news URL.</b>";
+        return;
+      }
+
+      checkLinkWithBackend(link, status, reason, meter, loader, resultBox);
       return;
     }
-
-    // Default safe
-    status.innerText = "SAFE";
-    status.className = "real";
-    reason.innerText = "No suspicious patterns detected.";
-    meter.style.width = "20%";
-    meter.style.background = "green";
 
   }, 1200);
 }
 
 
-// 🔗 LINK BACKEND FUNCTION
-
-async function checkLinkWithBackend(link, status, reason, meter) {
+async function checkLinkWithBackend(link, status, reason, meter, loader, resultBox) {
 
   try {
 
@@ -119,46 +159,75 @@ async function checkLinkWithBackend(link, status, reason, meter) {
 
     const data = await response.json();
 
+    loader.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
     status.innerText = data.verdict;
 
-    let aiConfidence = Math.min(95, data.score * 10);
+    let aiConfidence = data.confidence;
 
-    let riskLevel = "LOW";
-    if (data.score >= 9) riskLevel = "HIGH";
-    else if (data.score >= 5) riskLevel = "MEDIUM";
+    meter.style.width = aiConfidence + "%";
 
-    let percent = (data.score / 15) * 100;
-    meter.style.width = percent + "%";
+    if (data.verdict === "PHISHING") {
+      meter.style.background = "red";
+      status.className = "danger";
+    }
+    else if (data.verdict === "SUSPICIOUS") {
+      meter.style.background = "orange";
+      status.className = "warning";
+    }
+    else {
+      meter.style.background = "green";
+      status.className = "safe";
+    }
 
-    if (data.score >= 9) meter.style.background = "red";
-    else if (data.score >= 5) meter.style.background = "orange";
-    else meter.style.background = "green";
+    // professional reasons formatting
+let reasonsHTML = "";
 
-    reason.innerHTML =
-      "<b>Threat Type:</b> " + data.verdict + "<br><br>" +
-      "<b>AI Confidence:</b> " + aiConfidence + "%<br><br>" +
-      "<b>Risk Level:</b> " + riskLevel + "<br><br>" +
-      "<b>Detection Reasons:</b><br>• " +
-      data.reasons.join("<br>• ");
-
-  } catch (error) {
-
-    status.innerText = "Error";
-    status.className = "invalid";
-    reason.innerText = "Backend connection failed.";
-    meter.style.width = "0%";
-  }
+if (data.reasons && data.reasons.length > 0) {
+  reasonsHTML = "<ul>";
+  data.reasons.forEach(r => {
+    reasonsHTML += "<li>" + r + "</li>";
+  });
+  reasonsHTML += "</ul>";
+} else {
+  reasonsHTML = "<p>No suspicious signals detected.</p>";
 }
 
+reason.innerHTML =
+  "<div class='analysis-block'>" +
+  "<h3>Link Security Analysis</h3>" +
 
-// 🖼 IMAGE BACKEND FUNCTION
+  "<div class='analysis-grid'>" +
 
-async function checkImageWithBackend(imageFile, status, reason, meter) {
+  "<div><b>Verdict:</b> " + data.verdict + "</div>" +
+  "<div><b>AI Confidence:</b> " + aiConfidence + "%</div>" +
+  "<div><b>Risk Level:</b> " + data.verdict + "</div>" +
+
+  "</div>" +
+
+  "<b>Detection Factors:</b>" +
+  reasonsHTML +
+
+  "</div>";
+  } 
+  
+  catch (error) {
+
+    loader.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
+    status.innerText = "BACKEND ERROR";
+    status.className = "invalid";
+    reason.innerHTML = "<b>Server connection failed.</b>";
+  }
+}
+async function checkImageWithBackend(file, status, reason, meter, loader, resultBox) {
 
   try {
 
-    let formData = new FormData();
-    formData.append("image", imageFile);
+    const formData = new FormData();
+    formData.append("image", file);
 
     const response = await fetch("http://127.0.0.1:5000/check_image", {
       method: "POST",
@@ -167,31 +236,69 @@ async function checkImageWithBackend(imageFile, status, reason, meter) {
 
     const data = await response.json();
 
+    loader.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
+    if (data.error) {
+      status.innerText = "IMAGE SCAN FAILED";
+      status.className = "invalid";
+      reason.innerHTML = "<b>Unable to analyze image.</b>";
+      return;
+    }
+
     status.innerText = data.verdict;
 
-    if (data.verdict.includes("FAKE")) status.className = "suspicious";
-    else if (data.verdict.includes("SUSPICIOUS")) status.className = "link";
-    else status.className = "real";
+    let aiConfidence = data.confidence;
+    meter.style.width = aiConfidence + "%";
 
-    let percent = (data.score / 8) * 100;
-    meter.style.width = percent + "%";
+    if (data.verdict.includes("FAKE")) {
+      meter.style.background = "red";
+      status.className = "danger";
+    }
+    else if (data.verdict.includes("SUSPICIOUS")) {
+      meter.style.background = "orange";
+      status.className = "warning";
+    }
+    else {
+      meter.style.background = "green";
+      status.className = "safe";
+    }
 
-    if (data.score >= 5) meter.style.background = "red";
-    else if (data.score >= 3) meter.style.background = "orange";
-    else meter.style.background = "green";
+    // reasons formatting
+    let reasonsHTML = "";
+
+    if (data.reasons && data.reasons.length > 0) {
+      reasonsHTML = "<ul>";
+      data.reasons.forEach(r => {
+        reasonsHTML += "<li>" + r + "</li>";
+      });
+      reasonsHTML += "</ul>";
+    } else {
+      reasonsHTML = "<p>No anomalies detected.</p>";
+    }
 
     reason.innerHTML =
-      "<b>Threat Type:</b> Image Fraud Analysis<br><br>" +
-      "<b>AI Confidence:</b> " + Math.min(95, data.score * 12) + "%<br><br>" +
-      "<b>Risk Level:</b> " + data.verdict + "<br><br>" +
-      "<b>Detection Reasons:</b><br>• " +
-      data.reasons.join("<br>• ");
+      "<div class='analysis-block'>" +
+      "<h3>Payment Screenshot Analysis</h3>" +
+
+      "<div class='analysis-grid'>" +
+      "<div><b>Verdict:</b> " + data.verdict + "</div>" +
+      "<div><b>AI Confidence:</b> " + aiConfidence + "%</div>" +
+      "<div><b>Risk Level:</b> " + data.verdict + "</div>" +
+      "</div>" +
+
+      "<b>Detection Factors:</b>" +
+      reasonsHTML +
+
+      "</div>";
 
   } catch (error) {
 
-    status.innerText = "Image analysis failed";
+    loader.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
+    status.innerText = "BACKEND ERROR";
     status.className = "invalid";
-    reason.innerText = "Backend connection error";
-    meter.style.width = "0%";
+    reason.innerHTML = "<b>Image scan server failed.</b>";
   }
 }

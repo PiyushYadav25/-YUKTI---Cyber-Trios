@@ -1,90 +1,147 @@
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#0d1117,#020c1b);
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg,#0b0f17,#020c1b);
   color: white;
   margin: 0;
 }
 
+/* PAGE ALIGNMENT */
 .container {
-  padding: 20px;
+  padding: 28px;
   text-align: center;
 }
 
-.title {
-  font-size: 32px;
-  margin-bottom: 5px;
+/* BRAND TITLE */
+.brand {
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
 }
 
+/* LOGO AREA */
+.logo-area {
+  margin-top: 8px;
+}
+
+/* SUBTITLE */
 .subtitle {
-  color: #58a6ff;
-  margin-bottom: 20px;
+  font-size: 16px;
+  color: #9fb3c8;
+  margin-bottom: 16px;
 }
 
+/* HIGHLIGHT LINE */
+.highlight-line {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 22px;
+  color: #e6f0ff;
+}
+
+/* VERIFY BUTTON AREA */
+.action-area {
+  margin-bottom: 28px;
+}
+
+/* INPUT/OUTPUT CARDS */
 .card {
-  background: #161b22;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 520px;
-  box-shadow: 0 0 15px rgba(0,255,255,0.1);
+  background: rgba(22, 27, 34, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 24px;
+  margin: 24px auto;
+  border-radius: 14px;
+  width: 92%;
+  max-width: 560px;
+  box-shadow: 0 0 18px rgba(0,0,0,0.4);
 }
 
+/* SECTION TITLE */
+.section-title {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+/* ABOUT TEXT */
+.about-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #c7d6e6;
+  text-align: center;
+}
+
+/* INPUT BOXES */
+textarea, input {
+  width: 94%;
+  padding: 13px;
+  margin: 14px 0;
+  border-radius: 8px;
+  border: 2px solid #2e3a4d;
+  background: #0f1622;
+  color: #e6f0ff;
+  outline: none;
+  transition: 0.25s;
+}
+
+/* INPUT FOCUS */
+textarea:focus, input:focus {
+  border-color: #4da3ff;
+}
+
+/* AI BUTTON */
 .btn {
   display: inline-block;
-  padding: 12px 24px;
-  background: #00c853;
+  padding: 14px 28px;
+  background: #1f6feb;
   color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  margin-top: 10px;
+  border-radius: 8px;
+  margin-top: 18px;
   cursor: pointer;
-}
-
-textarea, input {
-  width: 92%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
   border: none;
-}
-#status {
-  font-size: 22px;
-  font-weight: bold;
-  padding: 8px 15px;
-  border-radius: 6px;
-  display: inline-block;
+  letter-spacing: 0.5px;
 }
 
-/* Colors */
-.suspicious {
-  background: #ffd600;
+/* STATUS LABEL */
+#status {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.safe {
+  background: #2ea043;
+}
+
+.warning {
+  background: #f2cc60;
   color: black;
 }
 
+.danger {
+  background: #ff5c5c;
+}
+
 .invalid {
-  background: #ff5252;
+  background: #ff3b3b;
 }
 
-.real {
-  background: #00c853;
-}
-
-.link {
-  background: #00b0ff;
-}
+/* LOADER */
 .loader {
-  margin-top: 20px;
-  text-align: center;
+  margin-top: 25px;
 }
 
 .cyber-loader {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #00e5ff;
+  width: 44px;
+  height: 44px;
+  border: 4px solid #4da3ff;
   border-top: 4px solid transparent;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
   margin: auto;
 }
 
@@ -92,50 +149,62 @@ textarea, input {
   to { transform: rotate(360deg); }
 }
 
-/* THREAT METER UI */
-
-.threat-container {
-  margin-top: 18px;
+/* RESULT BLOCK */
+.analysis-block {
   text-align: left;
+  margin-top: 12px;
+}
+
+/* GRID INFO */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+/* BULLET FACTORS */
+.analysis-block ul {
+  padding-left: 18px;
+  margin-top: 8px;
+}
+
+.analysis-block li {
+  margin-bottom: 6px;
+}
+
+/* THREAT LEVEL */
+.threat-container {
+  margin-top: 24px;
 }
 
 .threat-label {
   font-weight: bold;
   margin-bottom: 6px;
-  color: #58a6ff;
+  color: #4da3ff;
+  font-size: 15px;
 }
 
+/* SMALL GLOW DOT */
+.threat-label::after {
+  content: " •";
+  color: #4da3ff;
+  margin-left: 6px;
+}
+
+/* THREAT BAR */
 .threat-bar {
   width: 100%;
   height: 14px;
-  background: #2a2f36;
-  border-radius: 10px;
+  background: #1c222c;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 #threatFill {
   height: 100%;
   width: 0%;
-  background: green;
+  background: #2ea043;
   transition: width 0.5s ease;
-}
-
-.threat-meter {
-  width: 100%;
-  height: 12px;
-  background: #333;
-  border-radius: 10px;
-  margin-top: 10px;
-  overflow: hidden;
-}
-
-#threatFill {
-  height: 100%;
-  width: 0%;
-  background: green;
-  transition: 0.5s;
-}
-
-.cyber-loader {
-  animation: spin 0.8s linear infinite;
 }

@@ -9,31 +9,28 @@
 <body>
 
 <div class="container">
+
   <h1 class="title">Verify WhatsApp Message</h1>
 
-  <div class="card">
+  <div class="card input-area">
 
-    <!-- TEXT INPUT -->
-    <textarea id="messageInput" placeholder="Paste WhatsApp forwarded text..."></textarea>
+    <textarea id="messageInput" placeholder="Paste forwarded message..."></textarea>
 
-    <!-- IMAGE INPUT -->
     <input type="file" id="imageInput" accept="image/*">
 
-    <!-- LINK INPUT -->
-    <input type="text" id="linkInput" placeholder="Paste news/video link">
+    <input type="text" id="linkInput" placeholder="Paste website / news / video link">
 
-    <!-- BUTTON -->
-    <button onclick="verifyMessage()" class="btn">Scan with AI</button>
+    <button onclick="verifyMessage()" class="btn">
+      <span class="ai-icon"></span> Scan with AI
+    </button>
 
   </div>
 
-  <!-- LOADER -->
   <div id="loader" class="loader hidden">
     <div class="cyber-loader"></div>
-    <p>AI scanning content...</p>
+    <p>Scanning content...</p>
   </div>
 
-  <!-- RESULT -->
   <div id="result" class="card hidden">
 
     <h2>AI Detection Result</h2>
@@ -41,18 +38,15 @@
     <p id="status"></p>
     <p id="reason"></p>
 
-    <!-- THREAT METER UI -->
     <div class="threat-container">
-
       <div class="threat-label">Threat Level</div>
-
       <div class="threat-bar">
         <div id="threatFill"></div>
       </div>
-
     </div>
 
   </div>
+
 </div>
 
 <script src="script.js"></script>
